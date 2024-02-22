@@ -1,0 +1,26 @@
+API_key: '114eeff82a1f6c329ac960107187e344'
+connection_url: 'mongodb://pigpig:0iEF&C84k4gqe&d&2D38%5EtNb&xln6d03hXLOGAcbY0LeRGUlGj@192.168.100.10:27017/'
+db_ecoterra: 'Ecoterra'
+weather_collection: 'weather'
+
+cities:
+  Atlixco: 
+  - 18.923085025419557
+  - -98.39557636380162
+  Cuapiaxtla: 
+  - 19.295867896783285
+  - -97.76888973800806
+  Tehuacan: 
+  - 18.52639736316348
+  - -97.47871399384229
+  Phoenix:
+  - 33.39119277195364
+  - -112.5928040604769
+
+notifications:
+  'temp_min': 22.18
+  'temp_max': 22.18
+  'pressure_min': 1017
+  'pressure_max': 1040
+  'humidity_min': 12
+  'humidity_max': 16
