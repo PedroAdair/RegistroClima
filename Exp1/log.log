@@ -140,3 +140,10 @@
 2024-02-22 16:07:33,517 - DEBUG - http://api.openweathermap.org:80 "GET /data/2.5/air_pollution?lat=19.295867896783285&lon=-97.76888973800806&appid=114eeff82a1f6c329ac960107187e344&units=metric HTTP/1.1" 200 190
 2024-02-22 16:14:10,651 - DEBUG - Starting new HTTP connection (1): api.openweathermap.org:80
 2024-02-22 16:14:16,209 - DEBUG - http://api.openweathermap.org:80 "GET /data/2.5/air_pollution?lat=19.295867896783285&lon=-97.76888973800806&appid=114eeff82a1f6c329ac960107187e344&units=metric HTTP/1.1" 200 190
+2024-02-22 16:24:12,891 - DEBUG - Starting new HTTPS connection (1): api.openweathermap.org:443
+2024-02-22 16:24:13,284 - DEBUG - https://api.openweathermap.org:443 "GET /data/2.5/weather?lat=19.295867896783285&lon=-97.76888973800806&appid=114eeff82a1f6c329ac960107187e344&units=metric HTTP/1.1" 200 495
+2024-02-22 16:24:13,439 - DEBUG - Starting new HTTPS connection (1): api.openweathermap.org:443
+2024-02-22 16:24:13,911 - DEBUG - https://api.openweathermap.org:443 "GET /data/2.5/weather?lat=18.923085025419557&lon=-98.39557636380162&appid=114eeff82a1f6c329ac960107187e344&units=metric HTTP/1.1" 200 512
+2024-02-22 16:24:13,915 - DEBUG - Starting new HTTPS connection (1): api.openweathermap.org:443
+2024-02-22 16:24:14,376 - DEBUG - https://api.openweathermap.org:443 "GET /data/2.5/weather?lat=19.295867896783285&lon=-97.76888973800806&appid=114eeff82a1f6c329ac960107187e344&units=metric HTTP/1.1" 200 495
+2024-02-22 16:24:14,381 - DEBUG - Starting new HTTPS connection (1): api.openweathermap.org:443
