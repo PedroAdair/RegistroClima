@@ -1,7 +1,11 @@
 API_key: '114eeff82a1f6c329ac960107187e344'
+pw: 'icmd lafi ftbt jsuj '
+USER_MAIL: 'proyectoconstanza02@gmail.com'
+
 connection_url: 'mongodb://pigpig:0iEF&C84k4gqe&d&2D38%5EtNb&xln6d03hXLOGAcbY0LeRGUlGj@192.168.100.10:27017/'
 db_ecoterra: 'Ecoterra'
 weather_collection: 'weather'
+alerts_collection: 'alerts'
 
 cities:
   Atlixco: 
@@ -16,8 +20,12 @@ cities:
   Phoenix:
   - 33.39119277195364
   - -112.5928040604769
-
+  Cholula:
+  - 19.059194242808232
+  - -98.27455292189993
 notifications:
+  'indexNotification': 4
+  'indexAlert': 5
   'temp_min': 22.18
   'temp_max': 22.18
   'pressure_min': 1017
@@ -44,13 +52,13 @@ notifications:
       'Calmed down': 
         'min': 0
         'max': 1.4
-      'Soft breeze ': 
+      'Soft breeze': 
         'min': 1.4
         'max': 5.4
-      'Moderate Breeze ':
+      'Moderate Breeze':
         'min': 5.4
         'max': 10.6
-      'Strong wind ':
+      'Strong wind':
         'min': 10.6
         'max': 17
       'Storm':
