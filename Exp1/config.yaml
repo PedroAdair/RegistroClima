@@ -24,6 +24,38 @@ notifications:
   'pressure_max': 1040
   'humidity_min': 12
   'humidity_max': 16
+  'weather':
+    'temp':
+      'Frozen': 
+        'min': -20
+        'max': 0
+      'Cold': 
+        'min': 0
+        'max': 10
+      'Moderate':
+        'min': 10
+        'max': 25
+      'Warm':
+        'min': 25
+        'max': 35
+      'Very warm':
+        'min': 35
+    'wind':
+      'Calmed down': 
+        'min': 0
+        'max': 1.4
+      'Soft breeze ': 
+        'min': 1.4
+        'max': 5.4
+      'Moderate Breeze ':
+        'min': 5.4
+        'max': 10.6
+      'Strong wind ':
+        'min': 10.6
+        'max': 17
+      'Storm':
+        'min': 17
+    
   'AirPollution':
     'so2': 
       'Good': 
