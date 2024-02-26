@@ -209,7 +209,8 @@ def message_email():
     msg['To']=  ', '.join(destinatarios)
     msg.attach(MIMEText(mensaje))
 
-    if len(mensaje)>0:
+    print(len(mensaje))
+    if len(mensaje) >2:
         with smtplib.SMTP('smtp.gmail.com') as server:
             server.starttls()
             server.login(config['USER_MAIL'], config['pw'])
