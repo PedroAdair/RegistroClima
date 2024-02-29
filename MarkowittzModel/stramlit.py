@@ -56,6 +56,7 @@ if not companies_select:
     df3 =   df2['AAPL'] #AAple por default
 else:
     df3 = df2[companies_select]
+    
     # region_name = region[0]
     # patn_selct = f'data{region_name}.csv'
     # df2 = pd.read_csv(filepath_or_buffer=patn_selct)
