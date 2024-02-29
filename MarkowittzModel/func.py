@@ -52,7 +52,7 @@ def load_DB(path:str):
     data = pd.read_csv(filepath_or_buffer=path)
     return data
 
-def FilterPortfolio(n_samples:int, data, asssets:list):
+def FilterPortfolio(n_samples:int, data:pd.DataFrame, asssets:list):
     """
     Input: list of asserts, 
 
@@ -91,7 +91,7 @@ def portfolio_stats(weigths, log_returns):
 def minimize_sharpe(weigths, log_returns):
     return - portfolio_stats(weigths=weigths, log_returns=log_returns)['Sharpe']
 
-def OptimalPortafolio(path:str, asssets:list, n_samples:int):
+def OptimalPortafolioComplete(path:str, asssets:list, n_samples:int):
 
     #load db
     df = load_DB(path=path)
@@ -132,7 +132,53 @@ def OptimalPortafolio(path:str, asssets:list, n_samples:int):
 
     return ideal_portfolio, port_samples
 
+def OptimalPortafolio(df:pd.DataFrame, asssets:list, n_samples:int):
 
-a,b = OptimalPortafolio(path='dataAdjClose.csv', asssets=['AAPL', 'XOM','MSFT', 'AMZN'],n_samples=100)
+    #filter 
+    log_returns, port_returns, port_volts = FilterPortfolio(n_samples=n_samples, data=df, asssets=asssets)
+    num_assets = len(asssets)
+
+
+    initializer = num_assets*[1./num_assets,]
+    bounds = tuple((0,1) for x in range(num_assets))
+    optimar_sharpe = optimize.minimize(minimize_sharpe, initializer, method='SLSQP', args=(log_returns,), bounds=bounds)
+    optimar_sharpe_weights = optimar_sharpe['x'].round(3)
+
+
+    print(f'Los pesos optimos en la cartera son: {list(zip(asssets, list(optimar_sharpe_weights*100)))}')
+    print(np.sum(optimar_sharpe_weights))
+
+    optimal_stats  = portfolio_stats(optimar_sharpe_weights, log_returns=log_returns)
+    optimal_return = np.round(optimal_stats['Return']*100,3)
+    
+    optimal_volatility = np.round(optimal_stats['Volatility']*100,3)
+    optimal_sharpe = np.round(optimal_stats['Sharpe'],3)
+    ideal_portfolio = {'optimal_return': optimal_return,
+                       'optimal_volatility':optimal_volatility,
+                       'optimal_sharpe': optimal_sharpe}
+    port_samples = {'port_volts': port_volts,
+                    'port_returns': port_returns}
+    portfolio_invertion = list(zip(asssets, list(optimar_sharpe_weights*100)))
+    #plot 
+    # sharpe = port_returns/port_volts
+    # max_sr_returns = port_returns[sharpe.argmax()]
+    # max_sr_volatility = port_volts[sharpe.argmax()]
+    # plt.figure(figsize=(12,6))
+    # plt.scatter(port_volts, port_returns, c= (port_returns/port_volts))
+    # plt.scatter(max_sr_volatility,max_sr_returns, c= 'red', s=30)
+    # plt.colorbar(label = 'Sharpe Ratio, rf=0')
+    # plt.xlabel('Volatilidad de la cartera')
+    # plt.ylabel('Retorno de la cartera')
+    # plt.savefig('foo.png')
+
+    return ideal_portfolio, port_samples, portfolio_invertion
+
+# df2 =   pd.read_csv(filepath_or_buffer='dataAdjClose.csv')
+# df3 =   df2[['Date','AAPL']] #Apple por default
+# df3.set_index('Date', inplace=True)
+# df3 = df3.dropna()
+# print(df3)
+
+# a,b = OptimalPortafolio(path='dataAdjClose.csv', asssets=['AAPL', 'XOM','MSFT', 'AMZN'],n_samples=100)
 # get_DB(tickers=config['Empresas'], price='Open',save=True)
 # print(a,b)
