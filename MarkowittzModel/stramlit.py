@@ -17,7 +17,7 @@ st.markdown('<style>div.block-container{padding-top:1rem}</style>',unsafe_allow_
 #     filename = fl.name
 #     df = pd.read_csv(filename)
 # else:
-#     # os.chdir(r'')
+#     # os.chdir(r'') 
 #     df = pd.read_csv('dataAdjClose.csv')
 
 df = pd.read_csv('dataAdjClose.csv')
