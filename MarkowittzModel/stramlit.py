@@ -114,6 +114,7 @@ with col1:
         st.download_button('Download Data', data= csv, file_name='Results.csv', mime='text/csv', help='Click here to download the data as a CSV file')
 
 # print(portfolio_invertion)
+        
 with col2:
     with st.expander('investment percentage:'):
         df_investment_percentage = pd.DataFrame(portfolio_invertion, columns=['Companies', 'investment percentage'])
