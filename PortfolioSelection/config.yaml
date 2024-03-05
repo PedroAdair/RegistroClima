@@ -1,0 +1,120 @@
+price: 'Adj Close'
+
+Empresas:
+  AAPL:
+    Ticker: AAPL
+    Name: Apple Inc.
+  MSFT:
+    Ticker: MSFT
+    Name: Microsoft Corporation
+  AMZN:
+    Ticker: AMZN
+    Name: Amazon.com Inc.
+  GOOGL:
+    Ticker: GOOGL
+    Name: Alphabet Inc. (Google)
+  TSLA:
+    Ticker: TSLA
+    Name: Tesla, Inc.
+  BABA:
+    Ticker: BABA
+    Name: Alibaba Group Holding Limited
+  JNJ:
+    Ticker: JNJ
+    Name: Johnson & Johnson
+  JPM:
+    Ticker: JPM
+    Name: JPMorgan Chase & Co.
+  V:
+    Ticker: V
+    Name: Visa Inc.
+  PG:
+    Ticker: PG
+    Name: Procter & Gamble Co.
+  KO:
+    Ticker: KO
+    Name: Coca-Cola Company
+  INTC:
+    Ticker: INTC
+    Name: Intel Corporation
+  GS:
+    Ticker: GS
+    Name: Goldman Sachs Group, Inc.
+  XOM:
+    Ticker: XOM
+    Name: Exxon Mobil Corporation
+  VZ:
+    Ticker: VZ
+    Name: Verizon Communications Inc.
+  BA:
+    Ticker: BA
+    Name: The Boeing Company
+  DIS:
+    Ticker: DIS
+    Name: Walt Disney Company
+  PFE:
+    Ticker: PFE
+    Name: Pfizer Inc.
+  CSCO:
+    Ticker: CSCO
+    Name: Cisco Systems, Inc.
+  IBM:
+    Ticker: IBM
+    Name: IBM - International Business Machines
+  GE:
+    Ticker: GE
+    Name: General Electric Company
+  ORCL:
+    Ticker: ORCL
+    Name: Oracle Corporation
+  CVX:
+    Ticker: CVX
+    Name: Chevron Corporation
+  PEP:
+    Ticker: PEP
+    Name: PepsiCo, Inc.
+  WMT:
+    Ticker: WMT
+    Name: Walmart Inc.
+  MMM:
+    Ticker: MMM
+    Name: 3M Company
+  ADBE:
+    Ticker: ADBE
+    Name: Adobe Inc.
+  MA:
+    Ticker: MA
+    Name: Mastercard Incorporated
+  MCD:
+    Ticker: MCD
+    Name: McDonald's Corporation
+  GM:
+    Ticker: GM
+    Name: General Motors Company
+  HD:
+    Ticker: HD
+    Name: The Home Depot, Inc.
+  NFLX:
+    Ticker: NFLX
+    Name: Netflix, Inc.
+  NVDA:
+    Ticker: NVDA
+    Name: NVIDIA Corporation
+  BAC:
+    Ticker: BAC
+    Name: Bank of America Corporation
+  HON:
+    Ticker: HON
+    Name: Honeywell International Inc.
+  CAT:
+    Ticker: CAT
+    Name: Caterpillar Inc.
+  PYPL:
+    Ticker: PYPL
+    Name: PayPal Holdings, Inc.
+  T:
+    Ticker: T
+    Name: AT&T Inc.
+  ACN:
+    Ticker: ACN
+    Name: Accenture plc

@@ -72,6 +72,7 @@ def FilterPortfolio(n_samples:int, data:pd.DataFrame, asssets:list):
         num_assets = len(asssets)
         weigths = np.random.random(num_assets)
         weigths /= np.sum(weigths)
+        print(weigths, np.sum(weigths))
         port_returns.append(np.sum(weigths*log_returns.mean())*252)
         port_volts.append(np.sqrt(np.dot(weigths.T, np.dot(log_returns.cov()*252, weigths))))
 
@@ -81,7 +82,7 @@ def FilterPortfolio(n_samples:int, data:pd.DataFrame, asssets:list):
     return log_returns, port_returns, port_volts
 
 def portfolio_stats(weigths, log_returns):
-    port_returns = np.sum(weigths*log_returns.mean())*252
+    port_returns = np.sum(weigths*log_returns.mean())*252 #covariance
     port_volts   = np.sqrt(np.dot(weigths.T, np.dot(log_returns.cov()*252, weigths))) #252 por la media anualizada
 
     sharpe =  port_returns/port_volts
@@ -140,8 +141,15 @@ def OptimalPortafolio(df:pd.DataFrame, asssets:list, n_samples:int):
 
 
     initializer = num_assets*[1./num_assets,]
+    print(f'initializer:{initializer}')
     bounds = tuple((0,1) for x in range(num_assets))
-    optimar_sharpe = optimize.minimize(minimize_sharpe, initializer, method='SLSQP', args=(log_returns,), bounds=bounds)
+    constraints = ({'type': 'eq', 'fun': lambda weights: np.sum(weights) - 1})
+    optimar_sharpe = optimize.minimize(minimize_sharpe, initializer, method='L-BFGS-B', args=(log_returns,), bounds=bounds, constraints=constraints)
+    
+    print('------------------------')
+    print('optimar_sharpe')
+    print(optimar_sharpe)
+    print('------------------------')
     optimar_sharpe_weights = optimar_sharpe['x'].round(3)
 
 

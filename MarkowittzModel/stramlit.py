@@ -50,6 +50,7 @@ else:
     patn_selct = f'data{region_name}.csv'
     df2 = pd.read_csv(filepath_or_buffer=patn_selct)
 
+n_samples = st.slider("Número de Simulaciones:", min_value=10, max_value=1000, value=100)
 #select filter for enterprise
 columns = df2.columns
 companies = list(columns)[1:]
@@ -85,7 +86,7 @@ st.subheader('Investment portfolio')
 
 asssets = [item for item in companies_select if item != 'Date']
 
-ideal_portfolio, port_samples, portfolio_invertion =OptimalPortafolio(df=df3, asssets=asssets, n_samples=100)
+ideal_portfolio, port_samples, portfolio_invertion =OptimalPortafolio(df=df3, asssets=asssets, n_samples=n_samples)
 
 df_port_samples = pd.DataFrame(port_samples)
 
@@ -103,7 +104,7 @@ st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
 
 #################################33
-
+st.subheader('Info')
 col1, col2 = st.columns((2))
 
 with col1:
@@ -121,3 +122,5 @@ with col2:
         st.write(df_investment_percentage)
         csv = df_investment_percentage.to_csv()
         st.download_button('Download Data', data= csv, file_name='investment_percentage.csv', mime='text/csv', help='Click here to download the data as a CSV file')
+
+
