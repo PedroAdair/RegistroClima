@@ -2,49 +2,100 @@ import pandas as pd
 import numpy as np
 import datetime
 import yfinance as yf
+from pypfopt.efficient_frontier import EfficientFrontier
+import math
 
 import yaml
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
-def get_data(ticker:str,price:str):
+def min_volatility(portfolio:list, max_len_portfolio:int, type_prize:str, period:str):
+  """
+  Obtain a portfolio with minimal volatility. Given a price type and a period
+
+  
+| Var               |type           | Description                     |example |
+|-------------------|---------------|---------------------------------|--------|
+| portfolio         |List of strings| List withs companies name key   |  ['AAPL',	'MSFT',	'AMZN',	'TSLA'] for Apple, Microsoft, Amazon and Tesla |
+| max_len_portfolio | int           |   maximum length of a portfolio | 10 |
+|type_prize         | str           | type or price fos companies     | 'Close' 'Open'	'High'	'Low'	'Close'|
+|period             | str |         | history time interval           |    '5y' |
     """
-    Obtener los precios historicos  de una accion
-    |Var   |type| Example|
-    |-----|-----|--------| 
-    |ticker|str | 'NVDA',  'MSFT', 'AMZN', 'AAPL'|
-    |price |str | ['Open'	'High'	'Low	Close'	'Adj Close']|
+  if len(portfolio) > max_len_portfolio:
+    raise Exception (f'El número máximo de activos en el portafolio es de {max_len_portfolio}')
+  else:
+      stock_prices = pd.DataFrame()
+      stock_returns = pd.DataFrame()
 
-    A continuacion se describen las opciones sobre el precio de las acciones
+      for x in portfolio:
+          stock = yf.Ticker(x)
+          close_price = stock.history(period=period)[type_prize]
 
-    * Open: El precio de apertura de las acciones en ese día.
-    * High: El precio más alto alcanzado por las acciones durante el día.
-    * Low: El precio más bajo alcanzado por las acciones durante el día.
-    * Close: El precio de cierre de las acciones en ese día.
-    * Adj Close: El precio de cierre ajustado, que tiene en cuenta eventos como dividendos, divisiones de acciones, etc. Es considerado como el precio real de cierre.
+          # Se insertan datos en stock_prices y stock_returns
+          stock_prices = pd.concat([stock_prices, close_price], axis=1)
+          # Con pct_change() obtenemos los rendimientos (cambio porcentual)
+          stock_returns = pd.concat([stock_returns, close_price.pct_change()], axis=1)
 
-    La salida consiste en un DataFrame que nos sera util para formar una base de datos sobre los precios historicos.
-    """
-    data = yf.download(ticker)[price]
-    return data
+  # Asignamos nombre de acciones a las columnas de cada DataFrame
 
-def get_DB(tickers:list, price:str, save=False):
-    """From config file in the argument 'Empresas', return historical data from action price, if save= True, save as cvs file.
-    * Open: El precio de apertura de las acciones en ese día.
-    * High: El precio más alto alcanzado por las acciones durante el día.
-    * Low: El precio más bajo alcanzado por las acciones durante el día.
-    * Close: El precio de cierre de las acciones en ese día.
-    * Adj Close: El precio de cierre ajustado, que tiene en cuenta eventos como dividendos, divisiones de acciones, etc. Es considerado como el precio real de cierre."""
-    data =  pd.DataFrame()
-    for ticker in tickers:
-        print(ticker)
-        data[ticker] = get_data(ticker=ticker, price=price)
-    if save:
-        print(f'Archivo guardado: data{price.replace(" ", "")}.csv')
-        data.to_csv(f'data{price.replace(" ", "")}.csv')
-    return data
+  stock_prices.columns = portfolio
+  stock_returns.columns = portfolio
 
-def load_DB(path:str):
-    'load a csv database'
-    data = pd.read_csv(filepath_or_buffer=path)
-    return data
+  # Eliminamos valores nulos de las columnas con dropna()
+  # (El primer valor de rendimiento es nulo)
+
+  stock_returns = stock_returns.dropna()
+
+  # # Ver los datos generados:
+  # print('Precios diarios, últimos 5 años (máximo)')
+  # display(stock_prices)
+  # print('Rendimientos diarios, últimos 5 años (máximo)')
+  # display(stock_returns)
+
+  # Rendimiento esperado de activos
+  expected_stock_returns = []
+
+  # Riesgo individual de activos
+  individual_stock_risk = []
+
+  for x, y in stock_returns.iteritems():
+    # En cada iteración se obtiene el rendimiento esperado y riesgo individual
+    # de cada activo (media y desviación estándar)
+    expected_stock_returns.append(y.mean())
+    individual_stock_risk.append(y.std())
+
+  stock_returns_cov_matrix = np.array(stock_returns.cov())
+
+  ### OPTIMIZACION DE MARKOWITZ ###
+  ef = EfficientFrontier(expected_stock_returns, stock_returns_cov_matrix, weight_bounds=(0,1))
+  ratios = ef.min_volatility()
+  cleaned_ratios = pd.Series(ratios)
+  cleaned_ratios.index = portfolio
+
+  optimal_portfolio = np.expand_dims(cleaned_ratios, axis=0)
+
+  # Rendimiento esperado
+  opt_portfolio_expected_return = np.matmul(optimal_portfolio, expected_stock_returns)
+
+  # Varianza del portafolio
+  opt_portfolio_var = np.matmul(optimal_portfolio, \
+                                np.matmul(stock_returns_cov_matrix, optimal_portfolio.transpose()))
+
+  # Riesgo del portafolio
+  opt_portfolio_risk = math.sqrt(opt_portfolio_var)
+
+  # # Ver datos obtenidos y Portafolio Óptimo de Markowitz:
+  # print('PORTAFOLIO ÓPTIMO DE MARKOWITZ:')
+  # print(f'Rendimiento esperado: {opt_portfolio_expected_return*100}')
+  # print(f'Varianza del portafolio: {opt_portfolio_var*100}')
+  # print(f'Riesgo del portafolio: {opt_portfolio_risk*100}')
+
+  # print('\n\nDel 100% de tu capital, el modelo sugiere\
+  # invertir las siguientes proporciones en cada activo:')
+  # print(cleaned_ratios*100)
+  output  = {'Rendimiento': opt_portfolio_expected_return*100,
+              'Varianza': opt_portfolio_var*100,
+              'Riesgo':opt_portfolio_risk*100,
+               'Proporciones': cleaned_ratios*100
+              }
+  return output
