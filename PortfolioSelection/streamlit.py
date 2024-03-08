@@ -39,24 +39,32 @@ with tabs[0]:
         file_name = 'dataOpen.csv'
         table = createDataset(path=file_name, stocks=companies_select)
         fecha_minima = table.index.min()
-        fecha_seleccionada = st.date_input("Selecciona una fecha posterior a " + str(fecha_minima), fecha_minima)
-        fecha_seleccionada = pd.Timestamp(fecha_seleccionada)
-        df3.index = pd.to_datetime(df3.index)
-        if fecha_seleccionada:
-            df3 = df3[df3.index >= fecha_seleccionada]
-        startDate = fecha_seleccionada
+        col1, col2 = st.columns((2))
+        with col1:
+            fecha_seleccionada = st.date_input("Selecciona una fecha posterior a " + str(fecha_minima), fecha_minima)
+            fecha_seleccionada = pd.Timestamp(fecha_seleccionada)
+            df3.index = pd.to_datetime(df3.index)
+            if fecha_seleccionada:
+                df3 = df3[df3.index >= fecha_seleccionada]
+            startDate = fecha_seleccionada
+        with col2:
+            st.write(df3.head())
         portfolio_info = display_simulated_ef_with_random(path=file_name,  stocks=companies_select,startDate=startDate, num_portfolios=n_samples, risk_free_rate=0.001)
     elif not region:
         df3 = pd.read_csv(filepath_or_buffer='dataOpen.csv')
         file_name = 'dataOpen.csv'
         table = createDataset(path=file_name, stocks=companies_select)
         fecha_minima = table.index.min()
-        fecha_seleccionada = st.date_input("Selecciona una fecha posterior a " + str(fecha_minima), fecha_minima)
-        fecha_seleccionada = pd.Timestamp(fecha_seleccionada)
-        df3.index = pd.to_datetime(df3.index)
-        if fecha_seleccionada:
-            df3 = df3[df3.index >= fecha_seleccionada]
-        startDate = fecha_seleccionada
+        col1, col2 = st.columns((2))
+        with col1:
+            fecha_seleccionada = st.date_input("Selecciona una fecha posterior a " + str(fecha_minima), fecha_minima)
+            fecha_seleccionada = pd.Timestamp(fecha_seleccionada)
+            df3.index = pd.to_datetime(df3.index)
+            if fecha_seleccionada:
+                df3 = df3[df3.index >= fecha_seleccionada]
+            startDate = fecha_seleccionada
+        with col2:
+            st.write(df3.head())
 
         portfolio_info = display_simulated_ef_with_random(path=file_name,  stocks=companies_select,startDate=startDate, num_portfolios=n_samples, risk_free_rate=0.001)
     elif not companies_select:
@@ -67,12 +75,16 @@ with tabs[0]:
         companies_select = ['AAPL', 'MSFT', 'GOOGL']
         table = createDataset(path=file_name, stocks=companies_select)
         fecha_minima = table.index.min()
-        fecha_seleccionada = st.date_input("Selecciona una fecha posterior a " + str(fecha_minima), fecha_minima)
-        fecha_seleccionada = pd.Timestamp(fecha_seleccionada)
-        df3.index = pd.to_datetime(df3.index)
-        if fecha_seleccionada:
-            df3 = df3[df3.index >= fecha_seleccionada]
-        startDate = fecha_seleccionada
+        col1, col2 = st.columns((2))
+        with col1:
+            fecha_seleccionada = st.date_input("Selecciona una fecha posterior a " + str(fecha_minima), fecha_minima)
+            fecha_seleccionada = pd.Timestamp(fecha_seleccionada)
+            df3.index = pd.to_datetime(df3.index)
+            if fecha_seleccionada:
+                df3 = df3[df3.index >= fecha_seleccionada]
+            startDate = fecha_seleccionada
+        with col2:
+            st.write(df3.head())
         portfolio_info = display_simulated_ef_with_random(path=file_name,  stocks=companies_select,startDate=startDate, num_portfolios=n_samples, risk_free_rate=0.001)
     else: 
         file_name = f'data{region}.csv'
@@ -82,14 +94,16 @@ with tabs[0]:
         table = createDataset(path=file_name, stocks=companies_select)
 
         fecha_minima = table.index.min()
-        fecha_seleccionada = st.date_input("Selecciona una fecha posterior a " + str(fecha_minima), fecha_minima)
-        fecha_seleccionada = pd.Timestamp(fecha_seleccionada)
-        df3.index = pd.to_datetime(df3.index)
-        if fecha_seleccionada:
-            df3 = df3[df3.index >= fecha_seleccionada]
-        startDate = fecha_seleccionada
-    
-    st.write(df3.head())
+        col1, col2 = st.columns((2))
+        with col1:
+            fecha_seleccionada = st.date_input("Selecciona una fecha posterior a " + str(fecha_minima), fecha_minima)
+            fecha_seleccionada = pd.Timestamp(fecha_seleccionada)
+            df3.index = pd.to_datetime(df3.index)
+            if fecha_seleccionada:
+                df3 = df3[df3.index >= fecha_seleccionada]
+            startDate = fecha_seleccionada
+        with col2:
+            st.write(df3.head())
     portfolio_info = display_simulated_ef_with_random(path=file_name,  stocks=companies_select,startDate=startDate, num_portfolios=n_samples, risk_free_rate=0.001)
 
 
@@ -132,19 +146,78 @@ with tabs[0]:
 
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
-
-    st.subheader('Info')
     col1, col2 = st.columns((2))
     with col2:
         with st.expander('investment percentage:'):
             df_port_samples = portfolio_info['PortafoliosAleatorios']
             # df_investment_percentage = pd.DataFrame(portfolio_invertion, columns=['Companies', 'investment percentage'])
-            st.write(df_port_samples)
+            # st.write(df_port_samples)
+            # st.dataframe()
+            columna_orden = st.selectbox("Seleccione la columna para ordenar", df_port_samples.columns)
+            
+            df_ordenado = df_port_samples.sort_values(by=columna_orden)
+            columnas_a_multiplicar = df_ordenado.columns[3:]
+            df_ordenado = df_ordenado[columnas_a_multiplicar] * 100
+            columnas_a_incorporar = df_port_samples.columns[:3]
+            df_ordenado[columnas_a_incorporar] = df_port_samples[columnas_a_incorporar]
+            # Mostrar el DataFrame ordenado
+            st.dataframe(df_ordenado, height=300)
             # csv = df_investment_percentage.to_csv()
             # st.download_button('Download Data', data= csv, file_name='investment_percentage.csv', mime='text/csv', help='Click here to download the data as a CSV file')
-        with col1:
-            df_inversion = pd.concat([markowittz_portfolio, PortafolioMinVolatilidad], keys=['markowittz_portfolio', 'PortafolioMinVolatilidad'])
-            with st.expander('Results:'):
-                st.write(df_inversion)
-                csv = df_inversion.to_csv()
-                st.download_button('Download Data', data= csv, file_name='Results.csv', mime='text/csv', help='Click here to download the data as a CSV file')
+    with col1:
+        df_inversion = pd.concat([markowittz_portfolio, PortafolioMinVolatilidad], keys=['markowittz_portfolio', 'PortafolioMinVolatilidad'])
+        with st.expander('Results:'):
+            st.write(df_inversion)
+            csv = df_inversion.to_csv()
+            st.download_button('Download Data', data= csv, file_name='Results.csv', mime='text/csv', help='Click here to download the data as a CSV file')
+
+  
+    st.subheader("Detalles de la Compra")
+    col1, col2, col3= st.columns((3))
+    with col1:
+        nombre_comprador = st.text_input("Nombre del Comprador")
+    with col2:
+        ApellidoMat = st.text_input("Apellido Materno")
+    with col3:
+        ApellidoPat = st.text_input("Apellido Paterno")
+
+    col1, col2, col3= st.columns((3))
+    with col1:
+        moneda = st.selectbox("Seleccione la Moneda", ["Dólares", "Pesos", "Libras"])
+    with col2:
+        total_inversion = st.number_input("Total de inversion", step=1)
+    with col3:
+        portafolio = st.selectbox("Seleccione el portafolio", ["Markowitz", "Min Volatilidad", "Personalizado"])
+        if portafolio == "Personalizado":
+            
+            valor = 1 / len(companies_select)*100
+            lista = [valor for _ in range(len(companies_select))]
+
+            df_personal = pd.DataFrame(lista,index=companies_select, columns=['Porcentaje'] )
+            df_editable  = st.data_editor(df_personal)
+            suma_porcentajes = df_personal['Porcentaje'].sum()
+
+            if st.button('Verificar suma de porcentajes'):
+                df_modificado = df_editable
+                if np.abs(suma_porcentajes - 100)<0.001:
+                    st.success('La suma de los porcentajes es igual a 100%.')
+                    df_personal['Inversión'] = df_modificado['Porcentaje'] / 100 * total_inversion
+                    st.write(df_personal)
+                else:
+                    st.error('La suma debe de dar 100%')
+        elif portafolio == "Markowitz":
+            df_personal = markowittz_portfolio
+            st.write(df_personal)
+        elif portafolio == "Min Volatilidad":
+            df_personal = PortafolioMinVolatilidad
+            st.write(df_personal)
+
+    if st.button("Efectuar"):
+        if portafolio  in["Markowitz","Min Volatilidad"]:
+            weights =df_personal.loc['allocation'].values
+        elif portafolio == "Personalizado":
+            # weights =df_personal.loc['Porcentaje'].values
+            weights = np.array(df_personal.iloc[:, 0].tolist())
+
+        portfolio_std_dev, portfolio_return  = PortafolioPersonal(stocks=companies_select, weights=weights,table=df3, startDate=startDate)  
+        st.write(portfolio_std_dev, portfolio_return )

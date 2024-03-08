@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+import streamlit as st
 
 
 def load_DB(path:str):
@@ -115,3 +115,19 @@ def display_simulated_ef_with_random(path:str, stocks:list,startDate,  num_portf
 # b = a['PortafolioMinVolatilidad']['composicion']
 
 # print(b[['KO']])
+##################################################33
+
+
+
+def mostrar_resumen(nombre_comprador, moneda, porcentaje_acciones):
+    st.subheader("Resumen de la Compra")
+    st.write(f"Nombre del Comprador: {nombre_comprador}")
+    st.write(f"Moneda: {moneda}")
+    st.write(f"Porcentaje de Acciones: {porcentaje_acciones}%")
+
+def PortafolioPersonal(stocks, weights,table, startDate):
+    table = table[table.index >= startDate]
+    df = pd.DataFrame(stocks, columns=['Valor_Inicial']) 
+    returns, mean_returns, cov_matrix = table_retusns_cov(table)
+    portfolio_std_dev, portfolio_return = portfolio_annualised_performance(weights=weights, mean_returns=mean_returns,cov_matrix=cov_matrix)
+    return portfolio_std_dev, portfolio_return 
