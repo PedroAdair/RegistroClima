@@ -8,7 +8,7 @@ import yaml
 from datetime import datetime
 from pymongo import MongoClient
 import logging
-
+from email import *
 
 logging.basicConfig(filename='log.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 with open("config.yaml", "r") as f:

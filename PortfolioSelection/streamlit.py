@@ -5,6 +5,15 @@ import pandas as pd
 import os
 import warnings
 from portfolioSelection import *
+
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import yaml
+import logging
+
+
+
 warnings.filterwarnings('ignore')
 
 
@@ -220,4 +229,24 @@ with tabs[0]:
             weights = np.array(df_personal.iloc[:, 0].tolist())
 
         portfolio_std_dev, portfolio_return  = PortafolioPersonal(stocks=companies_select, weights=weights,table=df3, startDate=startDate)  
-        st.write(portfolio_std_dev, portfolio_return )
+        mensaje = f"{nombre_comprador} {ApellidoMat} {ApellidoPat} ha comprado un portafolio con valor de {total_inversion} {moneda}. Este portafolio se hizo a travez de la siguietne metodologia: {portafolio}"
+        
+        def message_email(mensaje: str, destinatarios:list, asunto:str):
+                
+            with open("config.yaml", "r") as f:
+                config = yaml.safe_load(f)
+
+
+            user = 'Constanza'
+
+            msg = MIMEMultipart()
+            msg['From']= user
+            msg['Subject']= asunto
+            msg['To']=  ', '.join(destinatarios)
+            msg.attach(MIMEText(mensaje))
+            with smtplib.SMTP('smtp.gmail.com') as server:
+                    server.starttls()
+                    server.login(config['USER_MAIL'], config['pw'])
+                    server.sendmail(config['USER_MAIL'],destinatarios, msg.as_string())
+        message_email(mensaje=mensaje, destinatarios=['ferphoenix1@gmail.com'])
+        st.write('Se ha enviado un correo de notificación')
